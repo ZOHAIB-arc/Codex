@@ -1,4 +1,4 @@
-Open MetaMask and connect it to the Ethereum chain is a prerequisite
+
 
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
@@ -34,3 +34,24 @@ contract CodexToken is ERC20 {
         return "This is the Codex token. It helps you understand if the code is AI-developed or self-developed. Use getDevelopmentType() to check.";
     }
 }
+const hre = require("hardhat");
+
+async function main() {
+  const [deployer] = await hre.ethers.getSigners();
+  console.log("Deploying contracts with account:", deployer.address);
+
+  const CodexToken = await hre.ethers.getContractFactory("CodexToken");
+  const codexToken = await CodexToken.deploy("Codex", "CDX", 1000000, "AI-Developed");
+
+  console.log("Waiting for deployment...");
+  await codexToken.deployed();
+
+  console.log("CodexToken deployed to:", codexToken.address);
+}
+
+main()
+  .then(() => process.exit(0))
+  .catch((error) => {
+    console.error("Deployment failed:", error);
+    process.exit(1);
+  });
